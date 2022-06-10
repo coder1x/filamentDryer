@@ -1,11 +1,11 @@
-#ifndef Сontrol_H
-#define Сontrol_H
+#ifndef Button_H
+#define Button_H
 #include <Arduino.h>
 
-class Сontrol
+class Button
 {
 public:
-  Сontrol(int pin);
+  Button(int pin);
   char *button();
 
 private:

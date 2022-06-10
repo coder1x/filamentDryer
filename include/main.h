@@ -2,14 +2,14 @@
 #include "ClockDryer.h"
 #include "TemperatureSensor.h"
 #include "Display.h"
-#include "Сontrol.h"
+#include "Button.h"
 using namespace std;
 
 // -- кнопки
-Сontrol buttonLeft(27);
-Сontrol buttonRight(12);
-Сontrol buttonSelect(14);
-Сontrol buttonEnter(26);
+Button buttonLeft(27);
+Button buttonRight(12);
+Button buttonSelect(14);
+Button buttonEnter(26);
 
 // -- Реле
 

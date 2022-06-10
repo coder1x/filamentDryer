@@ -1,13 +1,12 @@
+#include "Button.h"
 
-#include "Сontrol.h"
-
-Сontrol::Сontrol(int pin)
+Button::Button(int pin)
 {
   this->pin = pin;
   pinMode(pin, INPUT_PULLUP);
 }
 
-char *Сontrol::button()
+char *Button::button()
 {
 
   bool btnState = !digitalRead(this->pin);
