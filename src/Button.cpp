@@ -6,27 +6,71 @@ Button::Button(int pin)
   pinMode(pin, INPUT_PULLUP);
 }
 
-char *Button::button()
+bool Button::click()
 {
+  bool buttonState = !digitalRead(this->pin);
+  const int time = millis() - timerClick;
+  const bool isTime = time > delay;
 
-  bool btnState = !digitalRead(this->pin);
-  if (btnState && !flag && millis() - btnTimer > 10)
-  {
-    flag = true;
-    btnTimer = millis();
-
-    sprintf(buffer, "%s%d", " press: ", this->pin);
-    return buffer;
+  if (buttonState && !isCliked && isTime)
+  { // нажали кнопку
+    isCliked = true;
+    timerClick = millis();
   }
 
-  if (!btnState && flag && millis() - btnTimer > 10)
-  {
-    flag = false;
-    btnTimer = millis();
-
-    sprintf(buffer, "%s%d", " release: ", this->pin);
-    return buffer;
+  if (!buttonState && isCliked && isTime)
+  { // произашёл клик (отпустили кнопку)
+    isCliked = false;
+    timerClick = millis();
+    return true;
   }
 
-  return "";
+  return false;
+}
+
+bool Button::press()
+{
+  bool buttonState = !digitalRead(this->pin);
+  const int time = millis() - timerPress;
+  const bool isTime = time > delayPress;
+
+  if (buttonState && isTime)
+  { // нажали кнопку
+    isPressed = true;
+    timerPress = millis();
+    return isPressed;
+  }
+
+  if (!buttonState)
+    isPressed = false;
+
+  return isPressed;
+}
+
+bool Button::onePress()
+{
+  bool buttonState = !digitalRead(this->pin);
+  const int time = millis() - timerOnePress;
+  const bool isTime = time > delay;
+
+  if (buttonState && !isOnePress && isTime)
+  { // нажали кнопку
+    isOnePress = true;
+    timerOnePress = millis();
+    return true;
+  }
+
+  if (!buttonState)
+    isOnePress = false;
+
+  return false;
+}
+
+void Button::setDelay(int delay)
+{
+  this->delay = delay;
+}
+void Button::setDelayPress(int delay)
+{
+  delayPress = delay;
 }

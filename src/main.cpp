@@ -44,53 +44,57 @@ void loop()
 
   //-------------------------------- Кнопки
 
-  char *buttonText = buttonLeft.button();
-  if (buttonText != "")
-  {
-    clearLine(35);
-    display.drawtext(
-        buttonText,
-        display.colorHex("#FF6600"),
-        display.colorHex("#000000"),
-        0,
-        35);
-  }
+  // bool isClicked = buttonLeft.click();
+  // if (isClicked)
+  // {
+  //   clearLine(35);
+  //   display.drawtext(
+  //       "buttonLeft",
+  //       display.colorHex("#FF6600"),
+  //       display.colorHex("#000000"),
+  //       0,
+  //       35);
+  // }
+  // else
+  // {
+  //   clearLine(35);
+  // }
 
-  buttonText = buttonRight.button();
-  if (buttonText != "")
-  {
-    clearLine(35);
-    display.drawtext(
-        buttonText,
-        display.colorHex("#FF6600"),
-        display.colorHex("#000000"),
-        0,
-        35);
-  }
+  // buttonText = buttonRight.button();
+  // if (buttonText != "")
+  // {
+  //   clearLine(35);
+  //   display.drawtext(
+  //       buttonText,
+  //       display.colorHex("#FF6600"),
+  //       display.colorHex("#000000"),
+  //       0,
+  //       35);
+  // }
 
-  buttonText = buttonSelect.button();
-  if (buttonText != "")
-  {
-    clearLine(35);
-    display.drawtext(
-        buttonText,
-        display.colorHex("#FF6600"),
-        display.colorHex("#000000"),
-        0,
-        35);
-  }
+  // buttonText = buttonSelect.button();
+  // if (buttonText != "")
+  // {
+  //   clearLine(35);
+  //   display.drawtext(
+  //       buttonText,
+  //       display.colorHex("#FF6600"),
+  //       display.colorHex("#000000"),
+  //       0,
+  //       35);
+  // }
 
-  buttonText = buttonEnter.button();
-  if (buttonText != "")
-  {
-    clearLine(35);
-    display.drawtext(
-        buttonText,
-        display.colorHex("#FF6600"),
-        display.colorHex("#000000"),
-        0,
-        35);
-  }
+  // buttonText = buttonEnter.button();
+  // if (buttonText != "")
+  // {
+  //   clearLine(35);
+  //   display.drawtext(
+  //       buttonText,
+  //       display.colorHex("#FF6600"),
+  //       display.colorHex("#000000"),
+  //       0,
+  //       35);
+  // }
 
   //-------------------------------- Реле
 }
