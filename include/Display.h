@@ -1,5 +1,3 @@
-
-
 #ifndef Display_H
 #define Display_H
 #include <Arduino.h>
@@ -20,9 +18,9 @@ class Display
 {
 public:
   Display();
-  void drawtext(char *text, uint16_t color, uint16_t color2, int x, int y);
+  void drawText(const char *text, uint16_t color, uint16_t color2, int x, int y, uint8_t size = 1);
   uint16_t colorHex(String color);
-  String utf8rus(String source);
+  String utf8Rus(String source);
   Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 private:

@@ -8,7 +8,7 @@ Button::Button(int pin)
 
 bool Button::click()
 {
-  bool buttonState = !digitalRead(this->pin);
+  const bool buttonState = !digitalRead(this->pin);
   const int time = millis() - timerClick;
   const bool isTime = time > delay;
 
@@ -30,7 +30,7 @@ bool Button::click()
 
 bool Button::press()
 {
-  bool buttonState = !digitalRead(this->pin);
+  const bool buttonState = !digitalRead(this->pin);
   const int time = millis() - timerPress;
   const bool isTime = time > delayPress;
 
@@ -49,7 +49,7 @@ bool Button::press()
 
 bool Button::onePress()
 {
-  bool buttonState = !digitalRead(this->pin);
+  const bool buttonState = !digitalRead(this->pin);
   const int time = millis() - timerOnePress;
   const bool isTime = time > delay;
 

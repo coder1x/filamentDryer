@@ -5,6 +5,7 @@ Display::Display()
 {
   tft.initR(INITR_144GREENTAB);
   tft.fillScreen(colorHex("#000000"));
+  tft.cp437(true);
 }
 
 uint16_t Display::colorHex(String color)
@@ -21,21 +22,23 @@ uint16_t Display::colorHex(String color)
   return tft.color565(r, g, b);
 }
 
-void Display::drawtext(
-    char *text,
+void Display::drawText(
+    const char *text,
     uint16_t color,
     uint16_t color2,
     int x,
-    int y)
+    int y,
+    uint8_t size)
 {
 
   tft.setCursor(x, y);
   tft.setTextColor(color, color2);
   tft.setTextWrap(true);
+  tft.setTextSize(size);
   tft.print(text);
 }
 
-String Display::utf8rus(String source)
+String Display::utf8Rus(String source)
 {
   int i, k;
   String target;
@@ -85,6 +88,5 @@ String Display::utf8rus(String source)
     m[0] = n;
     target = target + String(m);
   }
-
   return target;
 }

@@ -12,10 +12,9 @@ class TemperatureSensor
 {
 public:
   TemperatureSensor();
-  char *sensor();
+  int getTemperature();
 
 private:
-  char buffer[20] = "";
   GyverMAX6675<CLK_PIN, DATA_PIN, CS_PIN> sens; // указываем пины в порядке SCK SO CS
 };
 

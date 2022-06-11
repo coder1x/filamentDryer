@@ -20,4 +20,18 @@ Display display;
 ClockDryer clockDryer;
 
 // -- сенсор
-TemperatureSensor objectSensor;
+TemperatureSensor sensor;
+
+// -- Функции
+void showHeader();
+void showTimer(int select);
+void showTemperature(int select);
+void showFootor(int select);
+void handleButton();
+
+// -- переменные
+int hour = 0;
+int minutes = 0;
+int seconds = 0;
+int maxTemperature = 0;
+int selectItem = 0;
