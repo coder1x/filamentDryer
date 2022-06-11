@@ -5,12 +5,14 @@ void clearLine(int y);
 void setup()
 {
   Serial.begin(921600);
-  attachInterrupt(digitalPinToInterrupt(14), handleButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_SELECT), handleButtonSelect, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_ENTER), handleButtonEnter, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_LEFT), handleButtonLeft, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_RIGHT), handleButtonRight, FALLING);
 }
 
 void loop()
 {
-  // handleButton();
   if (buttonSelect.click())
   {
     ++selectItem;
@@ -22,16 +24,46 @@ void loop()
   showFootor(selectItem);
 }
 
-void IRAM_ATTR handleButton()
+void IRAM_ATTR handleButtonLeft()
+{
+}
+
+void IRAM_ATTR handleButtonRight()
+{
+}
+
+void IRAM_ATTR handleButtonEnter()
+{
+}
+
+void IRAM_ATTR handleButtonSelect()
 {
   if (buttonSelect.click())
-  {
     ++selectItem;
-  }
 
   if (selectItem > 3)
-  {
     selectItem = 0;
+}
+
+void showHeader()
+{
+  int temperature = sensor.getTemperature();
+  if (temperature != 0)
+  {
+    char buffer[20];
+    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), temperature, " C");
+    display.drawText(
+        buffer,
+        COLOR_TEXT,
+        COLOR_HIGHLIGHTED,
+        0,
+        2);
+    display.tft.drawLine(
+        0,
+        12,
+        128,
+        12,
+        display.colorHex(COLOR_LINE));
   }
 }
 
@@ -58,20 +90,20 @@ void showTimer(int select)
   if (selectItem == 1)
   {
     text = "[" + text + "]";
-    colorText = "#FFD800";
+    colorText = COLOR_FOCUS;
   }
   else
   {
     text = " " + text + " ";
-    colorText = "#FF6600";
+    colorText = COLOR_TEXT;
   }
 
   char buffer[30];
   sprintf(buffer, "%s", text);
   display.drawText(
       buffer,
-      display.colorHex(colorText),
-      display.colorHex("#000000"),
+      colorText,
+      COLOR_HIGHLIGHTED,
       coordsX,
       25,
       2);
@@ -80,7 +112,7 @@ void showTimer(int select)
       43,
       128,
       43,
-      display.colorHex("#A0A0A0"));
+      display.colorHex(COLOR_LINE));
 }
 
 void showTemperature(int select)
@@ -97,12 +129,12 @@ void showTemperature(int select)
   int coordsX = 4;
   if (selectItem == 2)
   {
-    colorText = "#FFD800";
+    colorText = COLOR_FOCUS;
     text = "[" + text + "]";
   }
   else
   {
-    colorText = "#FF6600";
+    colorText = COLOR_TEXT;
     text = " " + text + " ";
   }
 
@@ -110,8 +142,8 @@ void showTemperature(int select)
   sprintf(buffer, "%s", text);
   display.drawText(
       buffer,
-      display.colorHex(colorText),
-      display.colorHex("#000000"),
+      colorText,
+      COLOR_HIGHLIGHTED,
       coordsX,
       55,
       2);
@@ -120,7 +152,7 @@ void showTemperature(int select)
       72,
       128,
       72,
-      display.colorHex("#A0A0A0"));
+      display.colorHex(COLOR_LINE));
 }
 
 void showFootor(int select)
@@ -133,43 +165,21 @@ void showFootor(int select)
   if (selectItem == 3)
   {
     text = "[" + text + "]";
-    colorText = "#FFD800";
+    colorText = COLOR_FOCUS;
   }
   else
   {
     text = " " + text + " ";
-    colorText = "#FF6600";
+    colorText = COLOR_TEXT;
   }
 
   char buffer[20];
   sprintf(buffer, "%s", text);
   display.drawText(
       buffer,
-      display.colorHex(colorText),
-      display.colorHex("#000000"),
+      colorText,
+      COLOR_HIGHLIGHTED,
       coordsX,
       80,
       2);
-}
-
-void showHeader()
-{
-  int temperature = sensor.getTemperature();
-  if (temperature != 0)
-  {
-    char buffer[20];
-    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), temperature, " C");
-    display.drawText(
-        buffer,
-        display.colorHex("#FF6600"),
-        display.colorHex("#000000"),
-        0,
-        2);
-    display.tft.drawLine(
-        0,
-        12,
-        128,
-        12,
-        display.colorHex("#A0A0A0"));
-  }
 }

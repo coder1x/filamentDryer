@@ -6,15 +6,24 @@
 using namespace std;
 
 // -- кнопки
-Button buttonLeft(27);
-Button buttonRight(12);
-Button buttonSelect(14);
-Button buttonEnter(26);
+#define KEY_LEFT 27
+#define KEY_RIGHT 12
+#define KEY_SELECT 14
+#define KEY_ENTER 26
+
+Button buttonLeft(KEY_LEFT);
+Button buttonRight(KEY_RIGHT);
+Button buttonSelect(KEY_SELECT);
+Button buttonEnter(KEY_ENTER);
 
 // -- Реле
 
 // -- Дисплей
 Display display;
+#define COLOR_TEXT "#FF6600"
+#define COLOR_FOCUS "#FFD800"
+#define COLOR_HIGHLIGHTED "#000000"
+#define COLOR_LINE "#A0A0A0"
 
 // -- таймер
 ClockDryer clockDryer;
@@ -27,7 +36,10 @@ void showHeader();
 void showTimer(int select);
 void showTemperature(int select);
 void showFootor(int select);
-void handleButton();
+void handleButtonSelect();
+void handleButtonEnter();
+void handleButtonRight();
+void handleButtonLeft();
 
 // -- переменные
 int hour = 0;

@@ -24,15 +24,17 @@ uint16_t Display::colorHex(String color)
 
 void Display::drawText(
     const char *text,
-    uint16_t color,
-    uint16_t color2,
+    String color,
+    String color2,
     int x,
     int y,
     uint8_t size)
 {
 
   tft.setCursor(x, y);
-  tft.setTextColor(color, color2);
+  tft.setTextColor(
+      colorHex(color),
+      colorHex(color2));
   tft.setTextWrap(true);
   tft.setTextSize(size);
   tft.print(text);
