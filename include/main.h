@@ -34,4 +34,4 @@ int hour = 0;
 int minutes = 0;
 int seconds = 0;
 int maxTemperature = 0;
-int selectItem = 0;
+volatile int selectItem = 0;

@@ -5,26 +5,31 @@ void clearLine(int y);
 void setup()
 {
   Serial.begin(921600);
+  attachInterrupt(digitalPinToInterrupt(14), handleButton, FALLING);
 }
 
 void loop()
 {
+  // handleButton();
+  if (buttonSelect.click())
+  {
+    ++selectItem;
+  }
+
   showHeader();
-  handleButton();
   showTimer(selectItem);
   showTemperature(selectItem);
   showFootor(selectItem);
 }
 
-void handleButton()
+void IRAM_ATTR handleButton()
 {
-
-  if (buttonSelect.onePress())
+  if (buttonSelect.click())
   {
     ++selectItem;
   }
 
-  if (selectItem == 4)
+  if (selectItem > 3)
   {
     selectItem = 0;
   }
@@ -75,7 +80,7 @@ void showTimer(int select)
       43,
       128,
       43,
-      display.colorHex("#FFFFFF"));
+      display.colorHex("#A0A0A0"));
 }
 
 void showTemperature(int select)
@@ -89,7 +94,7 @@ void showTemperature(int select)
 
   String text = "MAX T:" + temperatureText;
   String colorText = "";
-  int coordsX = 2;
+  int coordsX = 4;
   if (selectItem == 2)
   {
     colorText = "#FFD800";
@@ -115,7 +120,7 @@ void showTemperature(int select)
       72,
       128,
       72,
-      display.colorHex("#FFFFFF"));
+      display.colorHex("#A0A0A0"));
 }
 
 void showFootor(int select)
@@ -165,6 +170,6 @@ void showHeader()
         12,
         128,
         12,
-        display.colorHex("#FFFFFF"));
+        display.colorHex("#A0A0A0"));
   }
 }
