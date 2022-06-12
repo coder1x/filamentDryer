@@ -13,13 +13,37 @@ void setup()
 
 void loop()
 {
-  if (buttonSelect.click())
-  {
+  const bool isSelect = buttonSelect.click();
+
+  if (isSelect && !isLockSelect)
     ++selectItem;
-  }
+
+  if (isSelect && isTimerEditing)
+    ++selectTimer;
 
   showHeader();
-  showTimer(selectItem);
+
+  // --------------------- Таймер
+  clockDryer.showTimer(
+      &selectItem,
+      COLOR_FOCUS,
+      COLOR_TEXT,
+      COLOR_HIGHLIGHTED);
+
+  if (isTimerEditing)
+    clockDryer.editeTimer(
+        &selectTimer,
+        COLOR_TEXT,
+        COLOR_HIGHLIGHTED);
+
+  display.tft.drawLine(
+      0,
+      43,
+      128,
+      43,
+      display.colorHex(COLOR_LINE));
+  // --------------------- Таймер end.
+
   showTemperature(selectItem);
   showFootor(selectItem);
 }
@@ -34,12 +58,31 @@ void IRAM_ATTR handleButtonRight()
 
 void IRAM_ATTR handleButtonEnter()
 {
+  if (buttonEnter.click())
+    switch (selectItem)
+    {
+    case 1: // установка таймера
+      isTimerEditing = true;
+      isLockSelect = true;
+      isSelectEdit = true;
+      break;
+    case 2: // установка максимальной температуры
+      break;
+    case 3: // кнопка старта
+      break;
+    default:
+      break;
+    }
 }
 
 void IRAM_ATTR handleButtonSelect()
 {
-  if (buttonSelect.click())
+  const bool isSelect = buttonSelect.click();
+  if (isSelect && !isLockSelect)
     ++selectItem;
+
+  if (isSelect && isTimerEditing)
+    ++selectTimer;
 
   if (selectItem > 3)
     selectItem = 0;
@@ -65,54 +108,6 @@ void showHeader()
         12,
         display.colorHex(COLOR_LINE));
   }
-}
-
-void showTimer(int select)
-{
-  // hour;
-  // minutes;
-  // seconds;
-
-  String hourText = String(hour);
-  String minutesText = String(minutes);
-  String secondsText = String(seconds);
-
-  if (hourText.length() < 2)
-    hourText += "0";
-  if (minutesText.length() < 2)
-    minutesText += "0";
-  if (secondsText.length() < 2)
-    secondsText += "0";
-
-  String text = hourText + ":" + minutesText + ":" + secondsText;
-  String colorText = "";
-  int coordsX = 5;
-  if (selectItem == 1)
-  {
-    text = "[" + text + "]";
-    colorText = COLOR_FOCUS;
-  }
-  else
-  {
-    text = " " + text + " ";
-    colorText = COLOR_TEXT;
-  }
-
-  char buffer[30];
-  sprintf(buffer, "%s", text);
-  display.drawText(
-      buffer,
-      colorText,
-      COLOR_HIGHLIGHTED,
-      coordsX,
-      25,
-      2);
-  display.tft.drawLine(
-      0,
-      43,
-      128,
-      43,
-      display.colorHex(COLOR_LINE));
 }
 
 void showTemperature(int select)

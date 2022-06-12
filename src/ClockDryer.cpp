@@ -1,31 +1,136 @@
 #include "ClockDryer.h"
 
-ClockDryer::ClockDryer()
+ClockDryer::ClockDryer(Display *display)
 {
+  this->display = display;
 }
 
-char *ClockDryer::startTimer()
+void ClockDryer::cursorTimer(
+    int coordsX,
+    String color,
+    String colorBackground)
 {
-  static uint32_t clockTime = millis();
-  if (millis() - clockTime < 1000)
-    return "";
-  clockTime = millis();
+  display->drawText(
+      "*",
+      color,
+      colorBackground,
+      coordsX,
+      17,
+      1);
+}
 
-  ++seconds;
-  if (seconds == 60)
+void ClockDryer::editeTimer(
+    volatile int *selectTimer,
+    String color,
+    String colorBackground)
+{
+
+  if (*selectTimer > 6)
+    *selectTimer = 1;
+
+  int coordsXPrev = 0;
+  int coordsXNext = 0;
+
+  switch (*selectTimer)
   {
-    seconds = 0;
-    ++minutes;
+  case 1:
+    coordsXPrev = 104;
+    coordsXNext = 20;
+    break;
+  case 2:
+    coordsXPrev = 20;
+    coordsXNext = 32;
+    break;
+  case 3:
+    coordsXPrev = 32;
+    coordsXNext = 56;
+    break;
+  case 4:
+    coordsXPrev = 56;
+    coordsXNext = 68;
+    break;
+  case 5:
+    coordsXPrev = 68;
+    coordsXNext = 92;
+    break;
+  case 6:
+    coordsXPrev = 92;
+    coordsXNext = 104;
+    break;
 
-    if (minutes == 60)
-    {
-      minutes = 0;
-      ++hour;
-    }
+  default:
+    break;
   }
 
-  buffer[0] = '\0';
-  sprintf(buffer, "%s%d%s%d%s%d", " Time: ", hour, " : ", minutes, " : ", seconds);
-
-  return buffer;
+  cursorTimer(coordsXPrev, colorBackground, colorBackground);
+  cursorTimer(coordsXNext, color, colorBackground);
 }
+
+String ClockDryer::validationDigital(int number)
+{
+  String numberText = String(number);
+  if (numberText.length() < 2)
+    return "0" + numberText;
+}
+
+void ClockDryer::showTimer(
+    volatile int *selectItem,
+    String colorFocus,
+    String color,
+    String colorBackground)
+{
+
+  String hourText = validationDigital(hour);
+  String minutesText = validationDigital(minutes);
+  String secondsText = validationDigital(seconds);
+
+  String text = hourText + ":" + minutesText + ":" + secondsText;
+  String colorText = "";
+  int coordsX = 5;
+  if (*selectItem == 1)
+  {
+    text = "[" + text + "]";
+    colorText = colorFocus;
+  }
+  else
+  {
+    text = " " + text + " ";
+    colorText = color;
+  }
+
+  char buffer[30];
+  sprintf(buffer, "%s", text);
+  display->drawText(
+      buffer,
+      colorText,
+      colorBackground,
+      coordsX,
+      25,
+      2);
+}
+
+// char *ClockDryer::startTimer()
+// {
+//   static uint32_t clockTime = millis();
+//   if (millis() - clockTime < 1000)
+//     return "";
+//   clockTime = millis();
+
+//   ++seconds;
+//   if (seconds == 60)
+//   {
+//     seconds = 0;
+//     ++minutes;
+
+//     if (minutes == 60)
+//     {
+//       minutes = 0;
+//       ++hour;
+//     }
+//   }
+
+//   buffer[0] = '\0';
+//   sprintf(buffer, "%s%d%s%d%s%d", " Time: ", hour, " : ", minutes, " : ", seconds);
+
+//   return buffer;
+// }

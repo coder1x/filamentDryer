@@ -26,14 +26,14 @@ Display display;
 #define COLOR_LINE "#A0A0A0"
 
 // -- таймер
-ClockDryer clockDryer;
+ClockDryer clockDryer(&display);
 
 // -- сенсор
 TemperatureSensor sensor;
 
 // -- Функции
 void showHeader();
-void showTimer(int select);
+// void showTimer(int select);
 void showTemperature(int select);
 void showFootor(int select);
 void handleButtonSelect();
@@ -42,8 +42,13 @@ void handleButtonRight();
 void handleButtonLeft();
 
 // -- переменные
-int hour = 0;
-int minutes = 0;
-int seconds = 0;
+
 int maxTemperature = 0;
-volatile int selectItem = 0;
+volatile bool isTimerEntered = false; // введён ли таймер
+volatile bool isTimerEditing = false; // режим редактирование таймера
+volatile bool isLockSelect = false;   // блокирует выбор элементов интерфейса
+volatile bool isSelectEdit = false;   // использовать селект только для выбора редактируемого значения.
+volatile int selectItem = 0;          // выбранный элемент интерфейса
+volatile int selectTimer = 1;
+
+String temperatureText[] = {"0", "0"};
