@@ -13,7 +13,7 @@ public:
   void setDelayPress(int delay);
 
 private:
-  int delay = 50;
+  int delay = 20;
   int delayPress = 400;
   bool isCliked = false;
   bool isPressed = false;

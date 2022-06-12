@@ -19,7 +19,7 @@ void ClockDryer::cursorTimer(
       1);
 }
 
-String inputNumber(String numberText, volatile int *plusMinus)
+String ClockDryer::inputNumber(String numberText, volatile int *plusMinus)
 {
   int newNumber = 0;
   newNumber = atoi(numberText.c_str()) + *plusMinus;
@@ -37,11 +37,6 @@ void ClockDryer::changeNumber(
     volatile int *plusMinus,
     volatile int *selectTimer)
 {
-  // hourText[2]
-  // minutesText
-  // secondsText
-
-  // int newNumber = 0;
 
   switch (*selectTimer)
   {
@@ -74,6 +69,11 @@ void ClockDryer::changeNumber(
     break;
   }
 
+  validationTime();
+}
+
+void ClockDryer::validationTime()
+{
   if (seconds > 60)
   {
     seconds = seconds - 60;
@@ -88,6 +88,19 @@ void ClockDryer::changeNumber(
 
   if (hour > 99)
     hour = 99;
+
+  String textDigit = validationDigital(hour);
+
+  hourText[0] = textDigit[0];
+  hourText[1] = textDigit[1];
+
+  textDigit = validationDigital(minutes);
+  minutesText[0] = textDigit[0];
+  minutesText[1] = textDigit[1];
+
+  textDigit = validationDigital(seconds);
+  secondsText[0] = textDigit[0];
+  secondsText[1] = textDigit[1];
 }
 
 void ClockDryer::editeTimer(

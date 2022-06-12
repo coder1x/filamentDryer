@@ -34,6 +34,8 @@ private:
       String color,
       String colorBackground);
   String validationDigital(int number);
+  String inputNumber(String numberText, volatile int *plusMinus);
+  void validationTime();
   String hourText[2] = {"0", "0"};
   String minutesText[2] = {"0", "0"};
   String secondsText[2] = {"0", "0"};
