@@ -19,6 +19,77 @@ void ClockDryer::cursorTimer(
       1);
 }
 
+String inputNumber(String numberText, volatile int *plusMinus)
+{
+  int newNumber = 0;
+  newNumber = atoi(numberText.c_str()) + *plusMinus;
+
+  if (newNumber < 0)
+    return String(9);
+
+  if (newNumber > 9)
+    return String(0);
+
+  return String(newNumber);
+}
+
+void ClockDryer::changeNumber(
+    volatile int *plusMinus,
+    volatile int *selectTimer)
+{
+  // hourText[2]
+  // minutesText
+  // secondsText
+
+  // int newNumber = 0;
+
+  switch (*selectTimer)
+  {
+  case 1:
+    hourText[0] = inputNumber(hourText[0], plusMinus);
+    hour = atoi((hourText[0] + hourText[1]).c_str());
+    break;
+  case 2:
+    hourText[1] = inputNumber(hourText[1], plusMinus);
+    hour = atoi((hourText[0] + hourText[1]).c_str());
+    break;
+  case 3:
+    minutesText[0] = inputNumber(minutesText[0], plusMinus);
+    minutes = atoi((minutesText[0] + minutesText[1]).c_str());
+    break;
+  case 4:
+    minutesText[1] = inputNumber(minutesText[1], plusMinus);
+    minutes = atoi((minutesText[0] + minutesText[1]).c_str());
+    break;
+  case 5:
+    secondsText[0] = inputNumber(secondsText[0], plusMinus);
+    seconds = atoi((secondsText[0] + secondsText[1]).c_str());
+    break;
+  case 6:
+    secondsText[1] = inputNumber(secondsText[1], plusMinus);
+    seconds = atoi((secondsText[0] + secondsText[1]).c_str());
+    break;
+
+  default:
+    break;
+  }
+
+  if (seconds > 60)
+  {
+    seconds = seconds - 60;
+    ++minutes;
+  }
+
+  if (minutes > 60)
+  {
+    minutes = minutes - 60;
+    ++hour;
+  }
+
+  if (hour > 99)
+    hour = 99;
+}
+
 void ClockDryer::editeTimer(
     volatile int *selectTimer,
     String color,
@@ -71,6 +142,8 @@ String ClockDryer::validationDigital(int number)
   String numberText = String(number);
   if (numberText.length() < 2)
     return "0" + numberText;
+
+  return numberText;
 }
 
 void ClockDryer::showTimer(

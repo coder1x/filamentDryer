@@ -13,14 +13,7 @@ void setup()
 
 void loop()
 {
-  const bool isSelect = buttonSelect.click();
-
-  if (isSelect && !isLockSelect)
-    ++selectItem;
-
-  if (isSelect && isTimerEditing)
-    ++selectTimer;
-
+  handleButtonClick();
   showHeader();
 
   // --------------------- Таймер
@@ -36,6 +29,14 @@ void loop()
         COLOR_TEXT,
         COLOR_HIGHLIGHTED);
 
+  if (isTimerDigitEditing)
+  {
+    clockDryer.changeNumber(
+        &plusMinus,
+        &selectTimer);
+    isTimerDigitEditing = false;
+  }
+
   display.tft.drawLine(
       0,
       43,
@@ -50,10 +51,20 @@ void loop()
 
 void IRAM_ATTR handleButtonLeft()
 {
+  if (buttonLeft.click())
+  {
+    isTimerDigitEditing = true;
+    plusMinus = -1;
+  }
 }
 
 void IRAM_ATTR handleButtonRight()
 {
+  if (buttonRight.click())
+  {
+    isTimerDigitEditing = true;
+    plusMinus = 1;
+  }
 }
 
 void IRAM_ATTR handleButtonEnter()
@@ -86,6 +97,29 @@ void IRAM_ATTR handleButtonSelect()
 
   if (selectItem > 3)
     selectItem = 0;
+}
+
+void handleButtonClick()
+{
+  const bool isSelect = buttonSelect.click();
+
+  if (isSelect && !isLockSelect)
+    ++selectItem;
+
+  if (isSelect && isTimerEditing)
+    ++selectTimer;
+
+  if (buttonLeft.click())
+  {
+    isTimerDigitEditing = true;
+    plusMinus = -1;
+  }
+
+  if (buttonRight.click())
+  {
+    isTimerDigitEditing = true;
+    plusMinus = 1;
+  }
 }
 
 void showHeader()
