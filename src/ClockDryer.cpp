@@ -89,6 +89,13 @@ void ClockDryer::validationTime()
   if (hour > 99)
     hour = 99;
 
+  ubdateClockFace();
+
+  isBroken = false;
+}
+
+void ClockDryer::ubdateClockFace()
+{
   String textDigit = validationDigital(hour);
   hourText[0] = textDigit[0];
   hourText[1] = textDigit[1];
@@ -100,6 +107,11 @@ void ClockDryer::validationTime()
   textDigit = validationDigital(seconds);
   secondsText[0] = textDigit[0];
   secondsText[1] = textDigit[1];
+}
+
+bool ClockDryer::getStatus()
+{
+  return isBroken;
 }
 
 void ClockDryer::editeTimer(
@@ -166,8 +178,14 @@ void ClockDryer::showTimer(
     volatile int *selectItem,
     String colorFocus,
     String color,
-    String colorBackground)
+    String colorBackground,
+    bool isStarted)
 {
+
+  if (isStarted)
+  {
+    startTimer();
+  }
 
   String hourText = validationDigital(hour);
   String minutesText = validationDigital(minutes);
@@ -198,28 +216,35 @@ void ClockDryer::showTimer(
       2);
 }
 
-// char *ClockDryer::startTimer()
-// {
-//   static uint32_t clockTime = millis();
-//   if (millis() - clockTime < 1000)
-//     return "";
-//   clockTime = millis();
+void ClockDryer::startTimer()
+{
+  if (isBroken)
+    return;
+  static uint32_t clockTime = millis();
+  if (millis() - clockTime < 1000)
+    return;
+  clockTime = millis();
 
-//   ++seconds;
-//   if (seconds == 60)
-//   {
-//     seconds = 0;
-//     ++minutes;
+  --seconds;
+  if (seconds < 0)
+  {
+    seconds = 59;
+    --minutes;
 
-//     if (minutes == 60)
-//     {
-//       minutes = 0;
-//       ++hour;
-//     }
-//   }
+    if (minutes < 0)
+    {
+      minutes = 59;
+      --hour;
 
-//   buffer[0] = '\0';
-//   sprintf(buffer, "%s%d%s%d%s%d", " Time: ", hour, " : ", minutes, " : ", seconds);
+      if (hour < 0)
+      {
+        isBroken = true;
+        hour = 0;
+        minutes = 0;
+        seconds = 0;
+      }
+    }
+  }
 
-//   return buffer;
-// }
+  ubdateClockFace();
+}

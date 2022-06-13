@@ -33,9 +33,9 @@ TemperatureSensor sensor;
 
 // -- Функции
 void showHeader();
-// void showTimer(int select);
-void showTemperature(int select);
-void showFootor(int select);
+void timer();
+void showTemperature();
+void showFootor();
 void handleButtonSelect();
 void handleButtonEnter();
 void handleButtonRight();
@@ -46,6 +46,7 @@ bool toggle(bool flag);
 // -- переменные
 
 int maxTemperature = 0;
+int currentTemperature = 0;
 volatile bool isTimerEntered = false;      // введён ли таймер
 volatile bool isTimerEditing = false;      // режим редактирование таймера
 volatile bool isTimerDigitEditing = false; // изменение цифры в таймере
@@ -55,6 +56,6 @@ volatile bool isLockSelect = false; // блокирует выбор элеме�
 volatile int selectItem = 0;        // выбранный элемент интерфейса
 volatile int selectTimer = 1;
 volatile bool isEnter = false;
-bool isTimerCursorClear = false;
+bool isStarted = false;
 
 String temperatureText[] = {"0", "0"};

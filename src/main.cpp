@@ -15,55 +15,13 @@ void loop()
 {
   handleButtonClick();
   showHeader();
+  timer();
 
-  // --------------------- Таймер
-  clockDryer.showTimer(
-      &selectItem,
-      COLOR_FOCUS,
-      COLOR_TEXT,
-      COLOR_HIGHLIGHTED);
-
-  if (isTimerEditing)
-  {
-    isTimerCursorClear = true;
-    clockDryer.editeTimer(
-        &selectTimer,
-        COLOR_TEXT,
-        COLOR_HIGHLIGHTED);
-
-    if (isTimerDigitEditing)
-    {
-      clockDryer.changeNumber(
-          &plusMinus,
-          &selectTimer);
-      isTimerDigitEditing = false;
-    }
-  }
-  else
-  {
-    if (isEnter && isTimerCursorClear)
-    {
-      isTimerCursorClear = false;
-      isEnter = false;
-      clockDryer.editeTimer(
-          &selectTimer,
-          COLOR_TEXT,
-          COLOR_HIGHLIGHTED, false);
-    }
-  }
-
-  display.tft.drawLine(
-      0,
-      43,
-      128,
-      43,
-      display.colorHex(COLOR_LINE));
-  // --------------------- Таймер end.
-
-  showTemperature(selectItem);
-  showFootor(selectItem);
+  showTemperature();
+  showFootor();
 }
 
+//--------------------------- IRAM_ATTR
 void IRAM_ATTR handleButtonLeft()
 {
   if (buttonLeft.click())
@@ -117,6 +75,57 @@ void IRAM_ATTR handleButtonSelect()
   if (selectItem > 3)
     selectItem = 0;
 }
+//--------------------------- IRAM_ATTR End.
+
+void timer()
+{
+  clockDryer.showTimer(
+      &selectItem,
+      COLOR_FOCUS,
+      COLOR_TEXT,
+      COLOR_HIGHLIGHTED,
+      isStarted);
+
+  if (isTimerEditing)
+  {
+    clockDryer.editeTimer(
+        &selectTimer,
+        COLOR_TEXT,
+        COLOR_HIGHLIGHTED);
+
+    if (isTimerDigitEditing)
+    {
+      clockDryer.changeNumber(
+          &plusMinus,
+          &selectTimer);
+      isTimerDigitEditing = false;
+    }
+  }
+  else
+  {
+    if (selectItem == 1 && isEnter)
+    {
+      isEnter = false;
+      clockDryer.editeTimer(
+          &selectTimer,
+          COLOR_TEXT,
+          COLOR_HIGHLIGHTED, false);
+    }
+
+    if (clockDryer.getStatus())
+    {
+      isStarted = false;
+      isLockSelect = false;
+    }
+  }
+
+  display.tft.drawLine(
+      0,
+      43,
+      128,
+      43,
+      display.colorHex(COLOR_LINE));
+}
 
 void handleButtonClick()
 {
@@ -143,11 +152,12 @@ void handleButtonClick()
 
 void showHeader()
 {
-  int temperature = sensor.getTemperature();
-  if (temperature != 0)
+
+  currentTemperature = sensor.getTemperature();
+  if (currentTemperature != 0)
   {
     char buffer[20];
-    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), temperature, " C");
+    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), currentTemperature, " C");
     display.drawText(
         buffer,
         COLOR_TEXT,
@@ -163,7 +173,7 @@ void showHeader()
   }
 }
 
-void showTemperature(int select)
+void showTemperature()
 {
   // maxTemperature
 
@@ -203,11 +213,11 @@ void showTemperature(int select)
       display.colorHex(COLOR_LINE));
 }
 
-void showFootor(int select)
+void showFootor()
 {
   // при нажатии на Старт - надпись должна измениться на Стоп.
 
-  String text = display.utf8Rus("Старт");
+  String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
   String colorText = "";
   int coordsX = 22;
   if (selectItem == 3)
@@ -230,6 +240,12 @@ void showFootor(int select)
       coordsX,
       80,
       2);
+
+  if (selectItem == 3 && isEnter)
+  {
+    isStarted = toggle(isStarted);
+    isEnter = false;
+  }
 }
 
 bool toggle(bool flag)
