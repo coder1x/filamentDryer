@@ -3,6 +3,7 @@
 ClockDryer::ClockDryer(Display *display)
 {
   this->display = display;
+  uint32_t clockTime = millis();
 }
 
 void ClockDryer::cursorTimer(
@@ -171,6 +172,12 @@ String ClockDryer::validationDigital(int number)
   if (numberText.length() < 2)
     return "0" + numberText;
 
+  // if (numberText.length() >= 2 && numberText[1] != '.')
+  // {
+  //   String digital(1, numberText[0]);
+  //   return digital + String(numberText[1]);
+  // }
+
   return numberText;
 }
 
@@ -220,15 +227,24 @@ void ClockDryer::startTimer()
 {
   if (isBroken)
     return;
-  static uint32_t clockTime = millis();
-  if (millis() - clockTime < 1000)
+
+  if (!isLockMilis)
+  {
+    isLockMilis = true;
+    clockTime = millis();
+  }
+
+  uint32_t rest = millis() - clockTime;
+
+  if (rest < 1000)
     return;
   clockTime = millis();
 
-  --seconds;
+  seconds = seconds - (double)rest / 1000;
+
   if (seconds < 0)
   {
-    seconds = 59;
+    seconds = 60 + seconds;
     --minutes;
 
     if (minutes < 0)

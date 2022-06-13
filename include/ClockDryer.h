@@ -26,10 +26,11 @@ public:
 
 private:
   Display *display;
-  int hour = 0;
-  int minutes = 0;
-  int seconds = 0;
+  double hour = 0;
+  double minutes = 0;
+  double seconds = 0;
   bool isBroken = false;
+  uint32_t clockTime = 0;
   void cursorTimer(int coordsX, String color, String colorBackground);
   String validationDigital(int number);
   String inputNumber(String numberText, volatile int *plusMinus);
@@ -39,6 +40,7 @@ private:
   String hourText[2] = {"0", "0"};
   String minutesText[2] = {"0", "0"};
   String secondsText[2] = {"0", "0"};
+  bool isLockMilis = false;
 };
 
 #endif
