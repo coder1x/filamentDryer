@@ -193,6 +193,10 @@ void ClockDryer::showTimer(
   {
     startTimer();
   }
+  else
+  {
+    clockTime = millis();
+  }
 
   String hourText = validationDigital(hour);
   String minutesText = validationDigital(minutes);

@@ -16,7 +16,6 @@ void loop()
   handleButtonClick();
   showHeader();
   timer();
-
   showTemperature();
   showFootor();
 }
@@ -24,7 +23,7 @@ void loop()
 //--------------------------- IRAM_ATTR
 void IRAM_ATTR handleButtonLeft()
 {
-  if (buttonLeft.click())
+  if (buttonLeft.click() && !isStarted && isLockSelect)
   {
     isTimerDigitEditing = true;
     plusMinus = -1;
@@ -33,7 +32,7 @@ void IRAM_ATTR handleButtonLeft()
 
 void IRAM_ATTR handleButtonRight()
 {
-  if (buttonRight.click())
+  if (buttonRight.click() && !isStarted && isLockSelect)
   {
     isTimerDigitEditing = true;
     plusMinus = 1;
@@ -53,8 +52,6 @@ void IRAM_ATTR handleButtonEnter()
     isTimerEditing = toggle(isTimerEditing);
     break;
   case 2: // установка максимальной температуры
-    break;
-  case 3: // кнопка старта
     break;
   default:
     break;
@@ -137,16 +134,37 @@ void handleButtonClick()
   if (isSelect && isTimerEditing)
     ++selectTimer;
 
-  if (buttonLeft.click())
+  if (buttonLeft.click() && !isStarted && isLockSelect)
   {
     isTimerDigitEditing = true;
     plusMinus = -1;
+    return;
   }
 
-  if (buttonRight.click())
+  if (buttonRight.click() && !isStarted && isLockSelect)
   {
     isTimerDigitEditing = true;
     plusMinus = 1;
+    return;
+  }
+
+  if (buttonEnter.click())
+  {
+    isEnter = true;
+
+    switch (selectItem)
+    {
+    case 1: // установка таймера
+      isTimerEditing = toggle(isTimerEditing);
+      break;
+    case 2: // установка максимальной температуры
+      break;
+    default:
+      break;
+    }
+
+    isLockSelect = toggle(isLockSelect);
+    return;
   }
 }
 
