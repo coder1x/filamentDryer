@@ -90,7 +90,6 @@ void ClockDryer::validationTime()
     hour = 99;
 
   String textDigit = validationDigital(hour);
-
   hourText[0] = textDigit[0];
   hourText[1] = textDigit[1];
 
@@ -106,7 +105,8 @@ void ClockDryer::validationTime()
 void ClockDryer::editeTimer(
     volatile int *selectTimer,
     String color,
-    String colorBackground)
+    String colorBackground,
+    bool isVisible)
 {
 
   if (*selectTimer > 6)
@@ -145,6 +145,9 @@ void ClockDryer::editeTimer(
   default:
     break;
   }
+
+  if (!isVisible)
+    color = colorBackground;
 
   cursorTimer(coordsXPrev, colorBackground, colorBackground);
   cursorTimer(coordsXNext, color, colorBackground);

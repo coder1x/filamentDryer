@@ -24,17 +24,32 @@ void loop()
       COLOR_HIGHLIGHTED);
 
   if (isTimerEditing)
+  {
+    isTimerCursorClear = true;
     clockDryer.editeTimer(
         &selectTimer,
         COLOR_TEXT,
         COLOR_HIGHLIGHTED);
 
-  if (isTimerDigitEditing)
+    if (isTimerDigitEditing)
+    {
+      clockDryer.changeNumber(
+          &plusMinus,
+          &selectTimer);
+      isTimerDigitEditing = false;
+    }
+  }
+  else
   {
-    clockDryer.changeNumber(
-        &plusMinus,
-        &selectTimer);
-    isTimerDigitEditing = false;
+    if (isEnter && isTimerCursorClear)
+    {
+      isTimerCursorClear = false;
+      isEnter = false;
+      clockDryer.editeTimer(
+          &selectTimer,
+          COLOR_TEXT,
+          COLOR_HIGHLIGHTED, false);
+    }
   }
 
   display.tft.drawLine(
@@ -69,21 +84,25 @@ void IRAM_ATTR handleButtonRight()
 
 void IRAM_ATTR handleButtonEnter()
 {
-  if (buttonEnter.click())
-    switch (selectItem)
-    {
-    case 1: // установка таймера
-      isTimerEditing = true;
-      isLockSelect = true;
-      isSelectEdit = true;
-      break;
-    case 2: // установка максимальной температуры
-      break;
-    case 3: // кнопка старта
-      break;
-    default:
-      break;
-    }
+  if (!buttonEnter.click())
+    return;
+
+  isEnter = true;
+
+  switch (selectItem)
+  {
+  case 1: // установка таймера
+    isTimerEditing = toggle(isTimerEditing);
+    break;
+  case 2: // установка максимальной температуры
+    break;
+  case 3: // кнопка старта
+    break;
+  default:
+    break;
+  }
+
+  isLockSelect = toggle(isLockSelect);
 }
 
 void IRAM_ATTR handleButtonSelect()
@@ -211,4 +230,9 @@ void showFootor(int select)
       coordsX,
       80,
       2);
+}
+
+bool toggle(bool flag)
+{
+  return flag ? false : true;
 }

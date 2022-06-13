@@ -1,4 +1,3 @@
-
 #ifndef ClockDryer_H
 #define ClockDryer_H
 #include <Arduino.h>
@@ -18,7 +17,8 @@ public:
   void editeTimer(
       volatile int *selectTimer,
       String color,
-      String colorBackground);
+      String colorBackground,
+      bool isVisible = true);
   void changeNumber(
       volatile int *plusMinus,
       volatile int *selectTimer);

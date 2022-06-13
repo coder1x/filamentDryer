@@ -41,6 +41,7 @@ void handleButtonEnter();
 void handleButtonRight();
 void handleButtonLeft();
 void handleButtonClick();
+bool toggle(bool flag);
 
 // -- переменные
 
@@ -51,8 +52,9 @@ volatile bool isTimerDigitEditing = false; // изменение цифры в �
 volatile int plusMinus = 0;                // -1 или 1 (определяем инкрементировать или декрементировать число)
 
 volatile bool isLockSelect = false; // блокирует выбор элементов интерфейса
-volatile bool isSelectEdit = false; // использовать селект только для выбора редактируемого значения.
 volatile int selectItem = 0;        // выбранный элемент интерфейса
 volatile int selectTimer = 1;
+volatile bool isEnter = false;
+bool isTimerCursorClear = false;
 
 String temperatureText[] = {"0", "0"};
