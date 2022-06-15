@@ -9,26 +9,26 @@ class ClockDryer
 public:
   ClockDryer(Display *display);
   void showTimer(
-      volatile int *selectItem,
+      volatile uint8_t *selectItem,
       String colorFocus,
       String color,
       String colorBackground,
       bool isStarted);
   void editeTimer(
-      volatile int *selectTimer,
+      volatile uint8_t *selectTimer,
       String color,
       String colorBackground,
       bool isVisible = true);
   void changeNumber(
-      volatile int *plusMinus,
-      volatile int *selectTimer);
+      volatile uint8_t *plusMinus,
+      volatile uint8_t *selectTimer);
   bool getStatus();
   void clearData();
 
 private:
-  void cursorTimer(int coordsX, String color, String colorBackground);
-  String validationDigital(int number);
-  String inputNumber(String numberText, volatile int *plusMinus);
+  void cursorTimer(uint8_t coordsX, String color, String colorBackground);
+  String validationDigital(uint8_t number);
+  String inputNumber(String numberText, volatile uint8_t *plusMinus);
   void validationTime();
   void startTimer();
   void ubdateClockFace();

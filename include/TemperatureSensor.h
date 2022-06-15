@@ -14,35 +14,35 @@ class TemperatureSensor
 {
 public:
   TemperatureSensor(Display *display);
-  int getTemperature();
+  uint8_t getTemperature();
   void showTemperature(
-      volatile int *selectItem,
+      volatile uint8_t *selectItem,
       String colorFocus,
       String color,
       String colorBackground);
   void editeTemperature(
-      volatile int *selectTemperature,
+      volatile uint8_t *selectTemperature,
       String color,
       String colorBackground,
       bool isVisible = true);
-  int getMaxTemperature();
+  uint8_t getMaxTemperature();
   void changeNumber(
-      volatile int *plusMinus,
-      volatile int *selectTimer);
+      volatile uint8_t *plusMinus,
+      volatile uint8_t *selectTimer);
   void clearData();
 
 private:
   Display *display;
   GyverMAX6675<CLK_PIN, DATA_PIN, CS_PIN> sens; // указываем пины в порядке SCK SO CS
-  String validationDigital(int number);
-  void cursorTemperature(int coordsX, String color, String colorBackground);
+  String validationDigital(uint8_t number);
+  void cursorTemperature(uint8_t coordsX, String color, String colorBackground);
   void ubdateClockFace();
   void validationTemperature();
-  String inputNumber(String numberText, volatile int *plusMinus);
+  String inputNumber(String numberText, volatile uint8_t *plusMinus);
   bool isLockMilis = false;
-  uint32_t timerTemperature = 0;
-  int maxTemperature = 0;
-  int currentTemperature = 0;
+  uint8_t timerTemperature = 0;
+  uint8_t maxTemperature = 0;
+  uint8_t currentTemperature = 0;
   String temperatureText[2] = {"0", "0"};
 };
 

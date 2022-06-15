@@ -18,7 +18,7 @@ class Display
 {
 public:
   Display();
-  void drawText(const char *text, String color, String color2, int x, int y, uint8_t size = 1);
+  void drawText(const char *text, String color, String color2, uint16_t x, uint16_t y, uint8_t size = 1);
   uint16_t colorHex(String color);
   String utf8Rus(String source);
   Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);

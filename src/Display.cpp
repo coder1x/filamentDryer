@@ -26,8 +26,8 @@ void Display::drawText(
     const char *text,
     String color,
     String color2,
-    int x,
-    int y,
+    uint16_t x,
+    uint16_t y,
     uint8_t size)
 {
 
@@ -42,7 +42,7 @@ void Display::drawText(
 
 String Display::utf8Rus(String source)
 {
-  int i, k;
+  uint16_t i, k;
   String target;
   unsigned char n;
   char m[2] = {'0', '\0'};

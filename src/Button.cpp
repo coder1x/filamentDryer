@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(int pin)
+Button::Button(uint8_t pin)
 {
   this->pin = pin;
   pinMode(pin, INPUT_PULLUP);
@@ -9,7 +9,7 @@ Button::Button(int pin)
 bool Button::click()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const int time = millis() - timerClick;
+  const uint16_t time = millis() - timerClick;
   const bool isTime = time > delay;
 
   if (buttonState && !isCliked && isTime)
@@ -31,7 +31,7 @@ bool Button::click()
 bool Button::press()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const int time = millis() - timerPress;
+  const uint16_t time = millis() - timerPress;
   const bool isTime = time > delayPress;
 
   if (buttonState && isTime)
@@ -50,7 +50,7 @@ bool Button::press()
 bool Button::onePress()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const int time = millis() - timerOnePress;
+  const uint16_t time = millis() - timerOnePress;
   const bool isTime = time > delay;
 
   if (buttonState && !isOnePress && isTime)
@@ -66,11 +66,11 @@ bool Button::onePress()
   return false;
 }
 
-void Button::setDelay(int delay)
+void Button::setDelay(uint16_t delay)
 {
   this->delay = delay;
 }
-void Button::setDelayPress(int delay)
+void Button::setDelayPress(uint16_t delay)
 {
   delayPress = delay;
 }

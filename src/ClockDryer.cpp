@@ -21,7 +21,7 @@ void ClockDryer::clearData()
 }
 
 void ClockDryer::cursorTimer(
-    int coordsX,
+    uint8_t coordsX,
     String color,
     String colorBackground)
 {
@@ -34,9 +34,9 @@ void ClockDryer::cursorTimer(
       1);
 }
 
-String ClockDryer::inputNumber(String numberText, volatile int *plusMinus)
+String ClockDryer::inputNumber(String numberText, volatile uint8_t *plusMinus)
 {
-  int newNumber = 0;
+  uint8_t newNumber = 0;
   newNumber = atoi(numberText.c_str()) + *plusMinus;
 
   if (newNumber < 0)
@@ -49,8 +49,8 @@ String ClockDryer::inputNumber(String numberText, volatile int *plusMinus)
 }
 
 void ClockDryer::changeNumber(
-    volatile int *plusMinus,
-    volatile int *selectTimer)
+    volatile uint8_t *plusMinus,
+    volatile uint8_t *selectTimer)
 {
 
   switch (*selectTimer)
@@ -130,7 +130,7 @@ bool ClockDryer::getStatus()
 }
 
 void ClockDryer::editeTimer(
-    volatile int *selectTimer,
+    volatile uint8_t *selectTimer,
     String color,
     String colorBackground,
     bool isVisible)
@@ -139,8 +139,8 @@ void ClockDryer::editeTimer(
   if (*selectTimer > 6)
     *selectTimer = 1;
 
-  int coordsXPrev = 0;
-  int coordsXNext = 0;
+  uint8_t coordsXPrev = 0;
+  uint8_t coordsXNext = 0;
 
   switch (*selectTimer)
   {
@@ -180,7 +180,7 @@ void ClockDryer::editeTimer(
   cursorTimer(coordsXNext, color, colorBackground);
 }
 
-String ClockDryer::validationDigital(int number)
+String ClockDryer::validationDigital(uint8_t number)
 {
   String numberText = String(number);
   if (numberText.length() < 2)
@@ -190,7 +190,7 @@ String ClockDryer::validationDigital(int number)
 }
 
 void ClockDryer::showTimer(
-    volatile int *selectItem,
+    volatile uint8_t *selectItem,
     String colorFocus,
     String color,
     String colorBackground,
@@ -212,7 +212,7 @@ void ClockDryer::showTimer(
 
   String text = hourText + ":" + minutesText + ":" + secondsText;
   String colorText = "";
-  int coordsX = 5;
+  uint8_t coordsX = 5;
   if (*selectItem == 1)
   {
     text = "[" + text + "]";
@@ -246,7 +246,7 @@ void ClockDryer::startTimer()
     clockTime = millis();
   }
 
-  uint32_t rest = millis() - clockTime;
+  uint16_t rest = millis() - clockTime;
 
   if (rest < 1000)
     return;

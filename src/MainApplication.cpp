@@ -31,43 +31,38 @@ void MainApplication::loop()
 }
 
 //--------------------------- IRAM_ATTR
+
+void MainApplication::selectElement()
+{
+  switch (selectItem)
+  {
+  case 1:
+    isTimerDigitEditing = true;
+    break;
+  case 2:
+    isTemperatureDigitEditing = true;
+    break;
+  default:
+    break;
+  }
+}
+
 void MainApplication::handleButtonLeft()
 {
-  if (buttonLeft.click() && !isStarted && isLockSelect)
+  const bool isUnlocked = !isStarted && isLockSelect;
+  if (buttonLeft.click() && isUnlocked)
   {
-    switch (selectItem)
-    {
-    case 1: // установка таймера
-      isTimerDigitEditing = true;
-      break;
-    case 2: // установка максимальной температуры
-      isTemperatureDigitEditing = true;
-      break;
-    default:
-      break;
-    }
-
+    selectElement();
     plusMinus = -1;
   }
 }
 
 void MainApplication::handleButtonRight()
 {
-  if (buttonRight.click() && !isStarted && isLockSelect)
+  const bool isUnlocked = !isStarted && isLockSelect;
+  if (buttonRight.click() && isUnlocked)
   {
-
-    switch (selectItem)
-    {
-    case 1: // установка таймера
-      isTimerDigitEditing = true;
-      break;
-    case 2: // установка максимальной температуры
-      isTemperatureDigitEditing = true;
-      break;
-    default:
-      break;
-    }
-
+    selectElement();
     plusMinus = 1;
   }
 }
@@ -96,16 +91,19 @@ void MainApplication::handleButtonEnter()
 
 void MainApplication::handleButtonSelect()
 {
-  const bool isSelect = buttonSelect.click();
-  if (isSelect && !isLockSelect)
-    ++selectItem;
+  if (!buttonSelect.click())
+    return;
 
-  if (isSelect && isTimerEditing)
+  if (isTimerEditing)
     ++selectTimer;
 
-  if (isSelect && isTemperatureEditing)
+  if (isTemperatureEditing)
     ++selectTemperature;
 
+  if (isLockSelect)
+    return;
+
+  ++selectItem;
   if (selectItem > 4)
     selectItem = 1;
 }
@@ -121,7 +119,7 @@ void MainApplication::handleButtonClick()
 
 void MainApplication::showHeader()
 {
-  int currentTemperature = sensor.getTemperature();
+  uint8_t currentTemperature = sensor.getTemperature();
   if (currentTemperature != 0)
   {
     char buffer[20];
@@ -234,29 +232,31 @@ void MainApplication::showTemperature()
       display.colorHex(COLOR_LINE));
 }
 
-void MainApplication::buttonStart()
+String MainApplication::toggleFocus(String *text, int item)
 {
-  String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
-  String colorText = "";
-  int coordsX = 22;
-  if (selectItem == 3)
+  if (selectItem == item)
   {
-    text = "[" + text + "]";
-    colorText = COLOR_FOCUS;
+    *text = "[" + *text + "]";
+    return COLOR_FOCUS;
   }
   else
   {
-    text = " " + text + " ";
-    colorText = COLOR_TEXT;
+    *text = " " + *text + " ";
+    return COLOR_TEXT;
   }
+}
 
+void MainApplication::buttonStart()
+{
+  String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
+  String color = toggleFocus(&text, 3);
   char buffer[20];
   sprintf(buffer, "%s", text);
   display.drawText(
       buffer,
-      colorText,
+      color,
       COLOR_HIGHLIGHTED,
-      coordsX,
+      22,
       80,
       2);
 
@@ -270,26 +270,14 @@ void MainApplication::buttonStart()
 void MainApplication::buttonClear()
 {
   String text = display.utf8Rus("Сброс");
-  String colorText = "";
-  int coordsX = 22;
-  if (selectItem == 4)
-  {
-    text = "[" + text + "]";
-    colorText = COLOR_FOCUS;
-  }
-  else
-  {
-    text = " " + text + " ";
-    colorText = COLOR_TEXT;
-  }
-
+  String color = toggleFocus(&text, 4);
   char buffer[20];
   sprintf(buffer, "%s", text);
   display.drawText(
       buffer,
-      colorText,
+      color,
       COLOR_HIGHLIGHTED,
-      coordsX,
+      22,
       104,
       2);
 

@@ -14,7 +14,7 @@ void TemperatureSensor::clearData()
   temperatureText[1] = '0';
 }
 
-String TemperatureSensor::validationDigital(int number)
+String TemperatureSensor::validationDigital(uint8_t number)
 {
   String numberText = String(number);
   if (numberText.length() < 2)
@@ -24,7 +24,7 @@ String TemperatureSensor::validationDigital(int number)
 }
 
 void TemperatureSensor::cursorTemperature(
-    int coordsX,
+    uint8_t coordsX,
     String color,
     String colorBackground)
 {
@@ -52,9 +52,9 @@ void TemperatureSensor::ubdateClockFace()
   temperatureText[1] = textDigit[1];
 }
 
-String TemperatureSensor::inputNumber(String numberText, volatile int *plusMinus)
+String TemperatureSensor::inputNumber(String numberText, volatile uint8_t *plusMinus)
 {
-  int newNumber = 0;
+  uint8_t newNumber = 0;
   newNumber = atoi(numberText.c_str()) + *plusMinus;
 
   if (newNumber < 0)
@@ -67,8 +67,8 @@ String TemperatureSensor::inputNumber(String numberText, volatile int *plusMinus
 }
 
 void TemperatureSensor::changeNumber(
-    volatile int *plusMinus,
-    volatile int *selectTimer)
+    volatile uint8_t *plusMinus,
+    volatile uint8_t *selectTimer)
 {
 
   switch (*selectTimer)
@@ -90,7 +90,7 @@ void TemperatureSensor::changeNumber(
 }
 
 void TemperatureSensor::editeTemperature(
-    volatile int *selectTemperature,
+    volatile uint8_t *selectTemperature,
     String color,
     String colorBackground,
     bool isVisible)
@@ -99,8 +99,8 @@ void TemperatureSensor::editeTemperature(
   if (*selectTemperature > 2)
     *selectTemperature = 1;
 
-  int coordsXPrev = 0;
-  int coordsXNext = 0;
+  uint8_t coordsXPrev = 0;
+  uint8_t coordsXNext = 0;
 
   switch (*selectTemperature)
   {
@@ -124,12 +124,12 @@ void TemperatureSensor::editeTemperature(
   cursorTemperature(coordsXNext, color, colorBackground);
 }
 
-int TemperatureSensor::getMaxTemperature()
+uint8_t TemperatureSensor::getMaxTemperature()
 {
   return maxTemperature;
 }
 
-int TemperatureSensor::getTemperature()
+uint8_t TemperatureSensor::getTemperature()
 {
 
   if (!isLockMilis)
@@ -153,7 +153,7 @@ int TemperatureSensor::getTemperature()
 }
 
 void TemperatureSensor::showTemperature(
-    volatile int *selectItem,
+    volatile uint8_t *selectItem,
     String colorFocus,
     String color,
     String colorBackground)
@@ -161,7 +161,7 @@ void TemperatureSensor::showTemperature(
 
   String text = "MAX T:" + validationDigital(maxTemperature);
   String colorText = "";
-  int coordsX = 4;
+  uint8_t coordsX = 4;
   if (*selectItem == 2)
   {
     colorText = colorFocus;

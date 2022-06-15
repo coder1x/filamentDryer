@@ -5,16 +5,16 @@
 class Button
 {
 public:
-  Button(int pin);
+  Button(uint8_t pin);
   bool click();
   bool press();
   bool onePress();
-  void setDelay(int delay);
-  void setDelayPress(int delay);
+  void setDelay(uint16_t delay);
+  void setDelayPress(uint16_t delay);
 
 private:
-  int delay = 20;
-  int delayPress = 400;
+  uint16_t delay = 20;
+  uint16_t delayPress = 400;
   bool isCliked = false;
   bool isPressed = false;
   bool isOnePress = false;
