@@ -6,6 +6,14 @@ TemperatureSensor::TemperatureSensor(Display *display)
   uint32_t timerTemperature = millis();
 }
 
+void TemperatureSensor::clearData()
+{
+  maxTemperature = 0;
+  currentTemperature = 0;
+  temperatureText[0] = '0';
+  temperatureText[1] = '0';
+}
+
 String TemperatureSensor::validationDigital(int number)
 {
   String numberText = String(number);

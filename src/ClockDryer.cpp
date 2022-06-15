@@ -6,6 +6,20 @@ ClockDryer::ClockDryer(Display *display)
   uint32_t clockTime = millis();
 }
 
+void ClockDryer::clearData()
+{
+  hour = 0;
+  minutes = 0;
+  seconds = 0;
+  hourText[0] = '0';
+  hourText[1] = '0';
+  minutesText[0] = '0';
+  minutesText[1] = '0';
+  secondsText[0] = '0';
+  secondsText[1] = '0';
+  isBroken = false;
+}
+
 void ClockDryer::cursorTimer(
     int coordsX,
     String color,

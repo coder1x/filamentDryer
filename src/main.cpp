@@ -17,7 +17,8 @@ void loop()
   showHeader();
   showTimer();
   showTemperature();
-  showFootor();
+  buttonStart();
+  buttonClear();
 }
 
 //--------------------------- IRAM_ATTR
@@ -96,8 +97,8 @@ void IRAM_ATTR handleButtonSelect()
   if (isSelect && isTemperatureEditing)
     ++selectTemperature;
 
-  if (selectItem > 3)
-    selectItem = 0;
+  if (selectItem > 4)
+    selectItem = 1;
 }
 //--------------------------- IRAM_ATTR End.
 
@@ -224,7 +225,7 @@ void showTemperature()
       display.colorHex(COLOR_LINE));
 }
 
-void showFootor()
+void buttonStart()
 {
   String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
   String colorText = "";
@@ -254,6 +255,41 @@ void showFootor()
   {
     isStarted = toggle(isStarted);
     isEnter = false;
+  }
+}
+
+void buttonClear()
+{
+  String text = display.utf8Rus("Сброс");
+  String colorText = "";
+  int coordsX = 22;
+  if (selectItem == 4)
+  {
+    text = "[" + text + "]";
+    colorText = COLOR_FOCUS;
+  }
+  else
+  {
+    text = " " + text + " ";
+    colorText = COLOR_TEXT;
+  }
+
+  char buffer[20];
+  sprintf(buffer, "%s", text);
+  display.drawText(
+      buffer,
+      colorText,
+      COLOR_HIGHLIGHTED,
+      coordsX,
+      104,
+      2);
+
+  if (selectItem == 4 && isEnter)
+  {
+    isEnter = false;
+    isLockSelect = false;
+    sensor.clearData();
+    clockDryer.clearData();
   }
 }
 

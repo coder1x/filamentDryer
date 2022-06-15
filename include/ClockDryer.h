@@ -23,6 +23,7 @@ public:
       volatile int *plusMinus,
       volatile int *selectTimer);
   bool getStatus();
+  void clearData();
 
 private:
   void cursorTimer(int coordsX, String color, String colorBackground);

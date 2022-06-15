@@ -29,6 +29,7 @@ public:
   void changeNumber(
       volatile int *plusMinus,
       volatile int *selectTimer);
+  void clearData();
 
 private:
   Display *display;
