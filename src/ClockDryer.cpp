@@ -172,12 +172,6 @@ String ClockDryer::validationDigital(int number)
   if (numberText.length() < 2)
     return "0" + numberText;
 
-  // if (numberText.length() >= 2 && numberText[1] != '.')
-  // {
-  //   String digital(1, numberText[0]);
-  //   return digital + String(numberText[1]);
-  // }
-
   return numberText;
 }
 

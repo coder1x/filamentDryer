@@ -25,22 +25,22 @@ public:
   bool getStatus();
 
 private:
-  Display *display;
-  double hour = 0;
-  double minutes = 0;
-  double seconds = 0;
-  bool isBroken = false;
-  uint32_t clockTime = 0;
   void cursorTimer(int coordsX, String color, String colorBackground);
   String validationDigital(int number);
   String inputNumber(String numberText, volatile int *plusMinus);
   void validationTime();
   void startTimer();
   void ubdateClockFace();
+  Display *display;
+  double hour = 0;
+  double minutes = 0;
+  double seconds = 0;
+  uint32_t clockTime = 0;
   String hourText[2] = {"0", "0"};
   String minutesText[2] = {"0", "0"};
   String secondsText[2] = {"0", "0"};
   bool isLockMilis = false;
+  bool isBroken = false;
 };
 
 #endif

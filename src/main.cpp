@@ -15,7 +15,7 @@ void loop()
 {
   handleButtonClick();
   showHeader();
-  timer();
+  showTimer();
   showTemperature();
   showFootor();
 }
@@ -25,7 +25,18 @@ void IRAM_ATTR handleButtonLeft()
 {
   if (buttonLeft.click() && !isStarted && isLockSelect)
   {
-    isTimerDigitEditing = true;
+    switch (selectItem)
+    {
+    case 1: // установка таймера
+      isTimerDigitEditing = true;
+      break;
+    case 2: // установка максимальной температуры
+      isTemperatureDigitEditing = true;
+      break;
+    default:
+      break;
+    }
+
     plusMinus = -1;
   }
 }
@@ -34,7 +45,19 @@ void IRAM_ATTR handleButtonRight()
 {
   if (buttonRight.click() && !isStarted && isLockSelect)
   {
-    isTimerDigitEditing = true;
+
+    switch (selectItem)
+    {
+    case 1: // установка таймера
+      isTimerDigitEditing = true;
+      break;
+    case 2: // установка максимальной температуры
+      isTemperatureDigitEditing = true;
+      break;
+    default:
+      break;
+    }
+
     plusMinus = 1;
   }
 }
@@ -52,6 +75,7 @@ void IRAM_ATTR handleButtonEnter()
     isTimerEditing = toggle(isTimerEditing);
     break;
   case 2: // установка максимальной температуры
+    isTemperatureEditing = toggle(isTemperatureEditing);
     break;
   default:
     break;
@@ -69,12 +93,45 @@ void IRAM_ATTR handleButtonSelect()
   if (isSelect && isTimerEditing)
     ++selectTimer;
 
+  if (isSelect && isTemperatureEditing)
+    ++selectTemperature;
+
   if (selectItem > 3)
     selectItem = 0;
 }
 //--------------------------- IRAM_ATTR End.
 
-void timer()
+void handleButtonClick()
+{
+  handleButtonSelect();
+  handleButtonLeft();
+  handleButtonRight();
+  handleButtonEnter();
+}
+
+void showHeader()
+{
+  int currentTemperature = sensor.getTemperature();
+  if (currentTemperature != 0)
+  {
+    char buffer[20];
+    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), currentTemperature, " C");
+    display.drawText(
+        buffer,
+        COLOR_TEXT,
+        COLOR_HIGHLIGHTED,
+        0,
+        2);
+    display.tft.drawLine(
+        0,
+        12,
+        128,
+        12,
+        display.colorHex(COLOR_LINE));
+  }
+}
+
+void showTimer()
 {
   clockDryer.showTimer(
       &selectItem,
@@ -83,7 +140,7 @@ void timer()
       COLOR_HIGHLIGHTED,
       isStarted);
 
-  if (isTimerEditing)
+  if (isTimerEditing && selectItem == 1)
   {
     clockDryer.editeTimer(
         &selectTimer,
@@ -124,105 +181,41 @@ void timer()
       display.colorHex(COLOR_LINE));
 }
 
-void handleButtonClick()
-{
-  const bool isSelect = buttonSelect.click();
-
-  if (isSelect && !isLockSelect)
-    ++selectItem;
-
-  if (isSelect && isTimerEditing)
-    ++selectTimer;
-
-  if (buttonLeft.click() && !isStarted && isLockSelect)
-  {
-    isTimerDigitEditing = true;
-    plusMinus = -1;
-    return;
-  }
-
-  if (buttonRight.click() && !isStarted && isLockSelect)
-  {
-    isTimerDigitEditing = true;
-    plusMinus = 1;
-    return;
-  }
-
-  if (buttonEnter.click())
-  {
-    isEnter = true;
-
-    switch (selectItem)
-    {
-    case 1: // установка таймера
-      isTimerEditing = toggle(isTimerEditing);
-      break;
-    case 2: // установка максимальной температуры
-      break;
-    default:
-      break;
-    }
-
-    isLockSelect = toggle(isLockSelect);
-    return;
-  }
-}
-
-void showHeader()
-{
-
-  currentTemperature = sensor.getTemperature();
-  if (currentTemperature != 0)
-  {
-    char buffer[20];
-    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), currentTemperature, " C");
-    display.drawText(
-        buffer,
-        COLOR_TEXT,
-        COLOR_HIGHLIGHTED,
-        0,
-        2);
-    display.tft.drawLine(
-        0,
-        12,
-        128,
-        12,
-        display.colorHex(COLOR_LINE));
-  }
-}
-
 void showTemperature()
 {
-  // maxTemperature
+  sensor.showTemperature(
+      &selectItem,
+      COLOR_FOCUS,
+      COLOR_TEXT,
+      COLOR_HIGHLIGHTED);
 
-  String temperatureText = String(maxTemperature);
-
-  if (temperatureText.length() < 2)
-    temperatureText += "0";
-
-  String text = "MAX T:" + temperatureText;
-  String colorText = "";
-  int coordsX = 4;
-  if (selectItem == 2)
+  if (isTemperatureEditing && selectItem == 2)
   {
-    colorText = COLOR_FOCUS;
-    text = "[" + text + "]";
+    sensor.editeTemperature(
+        &selectTemperature,
+        COLOR_TEXT,
+        COLOR_HIGHLIGHTED);
+
+    if (isTemperatureDigitEditing)
+    {
+      sensor.changeNumber(
+          &plusMinus,
+          &selectTemperature);
+      isTemperatureDigitEditing = false;
+    }
   }
   else
   {
-    colorText = COLOR_TEXT;
-    text = " " + text + " ";
+    if (selectItem == 2 && isEnter)
+    {
+      isEnter = false;
+      sensor.editeTemperature(
+          &selectTemperature,
+          COLOR_TEXT,
+          COLOR_HIGHLIGHTED, false);
+    }
   }
 
-  char buffer[20];
-  sprintf(buffer, "%s", text);
-  display.drawText(
-      buffer,
-      colorText,
-      COLOR_HIGHLIGHTED,
-      coordsX,
-      55,
-      2);
   display.tft.drawLine(
       0,
       72,
@@ -233,8 +226,6 @@ void showTemperature()
 
 void showFootor()
 {
-  // при нажатии на Старт - надпись должна измениться на Стоп.
-
   String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
   String colorText = "";
   int coordsX = 22;
