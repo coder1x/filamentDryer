@@ -5,6 +5,7 @@
 #include "TemperatureSensor.h"
 #include "Display.h"
 #include "Button.h"
+#include "Relay.h"
 using namespace std;
 
 class MainApplication

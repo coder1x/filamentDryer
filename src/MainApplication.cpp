@@ -10,6 +10,8 @@ Display display;
 ClockDryer clockDryer(&display);
 TemperatureSensor sensor(&display);
 
+Relay relay;
+
 // -- Дисплей
 #define COLOR_TEXT "#FF6600"
 #define COLOR_FOCUS "#FFD800"
@@ -137,6 +139,9 @@ void MainApplication::showHeader()
         12,
         display.colorHex(COLOR_LINE));
   }
+
+  if (isStarted)
+    relay.relayControl(currentTemperature);
 }
 
 void MainApplication::showTimer()
@@ -176,6 +181,7 @@ void MainApplication::showTimer()
 
     if (clockDryer.getStatus())
     {
+      relay.stopRelay();
       isStarted = false;
       isLockSelect = false;
     }
@@ -259,6 +265,15 @@ void MainApplication::buttonStart()
       22,
       80,
       2);
+
+  if (isStarted)
+  {
+    relay.setMaxTemperature(sensor.getMaxTemperature());
+  }
+  else
+  {
+    relay.stopRelay();
+  }
 
   if (selectItem == 3 && isEnter)
   {
