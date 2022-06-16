@@ -232,7 +232,7 @@ void MainApplication::showTemperature()
       display.colorHex(COLOR_LINE));
 }
 
-String MainApplication::toggleFocus(String *text, int item)
+String MainApplication::toggleFocus(String *text, uint8_t item)
 {
   if (selectItem == item)
   {

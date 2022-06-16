@@ -8,6 +8,21 @@ Display::Display()
   tft.cp437(true);
 }
 
+void Display::cursor(
+    uint8_t coordsX,
+    String color,
+    String colorBackground,
+    uint16_t x)
+{
+  drawText(
+      "*",
+      color,
+      colorBackground,
+      coordsX,
+      x,
+      1);
+}
+
 uint16_t Display::colorHex(String color)
 {
   color.trim();

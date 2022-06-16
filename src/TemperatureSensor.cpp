@@ -1,4 +1,5 @@
 #include "TemperatureSensor.h"
+#include "helpers.h"
 
 TemperatureSensor::TemperatureSensor(Display *display)
 {
@@ -14,60 +15,8 @@ void TemperatureSensor::clearData()
   temperatureText[1] = '0';
 }
 
-String TemperatureSensor::validationDigital(uint8_t number)
-{
-  String numberText = String(number);
-  if (numberText.length() < 2)
-    return "0" + numberText;
-
-  return numberText;
-}
-
-void TemperatureSensor::cursorTemperature(
-    uint8_t coordsX,
-    String color,
-    String colorBackground)
-{
-  display->drawText(
-      "*",
-      color,
-      colorBackground,
-      coordsX,
-      46,
-      1);
-}
-
-void TemperatureSensor::validationTemperature()
-{
-  if (maxTemperature > 99)
-    maxTemperature = 99;
-
-  ubdateClockFace();
-}
-
-void TemperatureSensor::ubdateClockFace()
-{
-  String textDigit = validationDigital(maxTemperature);
-  temperatureText[0] = textDigit[0];
-  temperatureText[1] = textDigit[1];
-}
-
-String TemperatureSensor::inputNumber(String numberText, volatile uint8_t *plusMinus)
-{
-  uint8_t newNumber = 0;
-  newNumber = atoi(numberText.c_str()) + *plusMinus;
-
-  if (newNumber < 0)
-    return String(9);
-
-  if (newNumber > 9)
-    return String(0);
-
-  return String(newNumber);
-}
-
 void TemperatureSensor::changeNumber(
-    volatile uint8_t *plusMinus,
+    volatile int8_t *plusMinus,
     volatile uint8_t *selectTimer)
 {
 
@@ -120,8 +69,8 @@ void TemperatureSensor::editeTemperature(
   if (!isVisible)
     color = colorBackground;
 
-  cursorTemperature(coordsXPrev, colorBackground, colorBackground);
-  cursorTemperature(coordsXNext, color, colorBackground);
+  display->cursor(coordsXPrev, colorBackground, colorBackground, 46);
+  display->cursor(coordsXNext, color, colorBackground, 46);
 }
 
 uint8_t TemperatureSensor::getMaxTemperature()
@@ -138,9 +87,7 @@ uint8_t TemperatureSensor::getTemperature()
     timerTemperature = millis();
   }
 
-  uint32_t rest = millis() - timerTemperature;
-
-  if (rest < 1000)
+  if ((millis() - timerTemperature) < 1000)
     return 0;
   timerTemperature = millis();
 
@@ -161,7 +108,7 @@ void TemperatureSensor::showTemperature(
 
   String text = "MAX T:" + validationDigital(maxTemperature);
   String colorText = "";
-  uint8_t coordsX = 4;
+
   if (*selectItem == 2)
   {
     colorText = colorFocus;
@@ -179,7 +126,37 @@ void TemperatureSensor::showTemperature(
       buffer,
       colorText,
       colorBackground,
-      coordsX,
+      4,
       55,
       2);
+}
+
+// -- private
+
+void TemperatureSensor::ubdateClockFace()
+{
+  String textDigit = validationDigital(maxTemperature);
+  temperatureText[0] = textDigit[0];
+  temperatureText[1] = textDigit[1];
+}
+
+void TemperatureSensor::validationTemperature()
+{
+  if (maxTemperature > 99)
+    maxTemperature = 99;
+
+  ubdateClockFace();
+}
+
+String TemperatureSensor::inputNumber(String numberText, volatile int8_t *plusMinus)
+{
+  int8_t newNumber = atoi(numberText.c_str()) + *plusMinus;
+
+  if (newNumber < 0)
+    return "9";
+
+  if (newNumber > 9)
+    return "0";
+
+  return String(newNumber);
 }

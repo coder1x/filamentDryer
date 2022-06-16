@@ -9,8 +9,7 @@ Button::Button(uint8_t pin)
 bool Button::click()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const uint16_t time = millis() - timerClick;
-  const bool isTime = time > delay;
+  const bool isTime = (millis() - timerClick) > delay;
 
   if (buttonState && !isCliked && isTime)
   { // нажали кнопку
@@ -31,8 +30,7 @@ bool Button::click()
 bool Button::press()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const uint16_t time = millis() - timerPress;
-  const bool isTime = time > delayPress;
+  const bool isTime = (millis() - timerPress) > delayPress;
 
   if (buttonState && isTime)
   { // нажали кнопку
@@ -50,8 +48,7 @@ bool Button::press()
 bool Button::onePress()
 {
   const bool buttonState = !digitalRead(this->pin);
-  const uint16_t time = millis() - timerOnePress;
-  const bool isTime = time > delay;
+  const bool isTime = (millis() - timerOnePress) > delay;
 
   if (buttonState && !isOnePress && isTime)
   { // нажали кнопку

@@ -26,7 +26,7 @@ private:
   void handleButtonClick();
   bool toggle(bool flag);
   void selectElement();
-  String toggleFocus(String *text, int item);
+  String toggleFocus(String *text, uint8_t item);
 
   volatile bool isTimerEditing = false;      // режим редактирование таймера
   volatile bool isTimerDigitEditing = false; // изменение цифры в таймере
@@ -35,7 +35,7 @@ private:
   volatile bool isEnter = false;
   volatile bool isLockSelect = false; // блокирует выбор элементов интерфейса
   volatile uint8_t selectItem = 0;    // выбранный элемент интерфейса
-  volatile uint8_t plusMinus = 0;     // -1 или 1 (определяем инкрементировать или декрементировать число)
+  volatile int8_t plusMinus = 0;      // -1 или 1 (определяем инкрементировать или декрементировать число)
   bool isStarted = false;
 
   volatile bool isTemperatureEditing = false;      // режим редактирование температуры

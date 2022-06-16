@@ -1,9 +1,53 @@
 #include "ClockDryer.h"
+#include "helpers.h"
 
 ClockDryer::ClockDryer(Display *display)
 {
   this->display = display;
   uint32_t clockTime = millis();
+}
+
+void ClockDryer::showTimer(
+    volatile uint8_t *selectItem,
+    String colorFocus,
+    String color,
+    String colorBackground,
+    bool isStarted)
+{
+
+  if (isStarted)
+  {
+    startTimer();
+  }
+  else
+  {
+    clockTime = millis();
+  }
+
+  String text = validationDigital(hour) +
+                ":" + validationDigital(minutes) +
+                ":" + validationDigital(seconds);
+  String colorText = "";
+  if (*selectItem == 1)
+  {
+    text = "[" + text + "]";
+    colorText = colorFocus;
+  }
+  else
+  {
+    text = " " + text + " ";
+    colorText = color;
+  }
+
+  char buffer[30];
+  sprintf(buffer, "%s", text);
+  display->drawText(
+      buffer,
+      colorText,
+      colorBackground,
+      5,
+      25,
+      2);
 }
 
 void ClockDryer::clearData()
@@ -20,36 +64,8 @@ void ClockDryer::clearData()
   isBroken = false;
 }
 
-void ClockDryer::cursorTimer(
-    uint8_t coordsX,
-    String color,
-    String colorBackground)
-{
-  display->drawText(
-      "*",
-      color,
-      colorBackground,
-      coordsX,
-      17,
-      1);
-}
-
-String ClockDryer::inputNumber(String numberText, volatile uint8_t *plusMinus)
-{
-  uint8_t newNumber = 0;
-  newNumber = atoi(numberText.c_str()) + *plusMinus;
-
-  if (newNumber < 0)
-    return String(9);
-
-  if (newNumber > 9)
-    return String(0);
-
-  return String(newNumber);
-}
-
 void ClockDryer::changeNumber(
-    volatile uint8_t *plusMinus,
+    volatile int8_t *plusMinus,
     volatile uint8_t *selectTimer)
 {
 
@@ -85,43 +101,6 @@ void ClockDryer::changeNumber(
   }
 
   validationTime();
-}
-
-void ClockDryer::validationTime()
-{
-  if (seconds > 60)
-  {
-    seconds = seconds - 60;
-    ++minutes;
-  }
-
-  if (minutes > 60)
-  {
-    minutes = minutes - 60;
-    ++hour;
-  }
-
-  if (hour > 99)
-    hour = 99;
-
-  ubdateClockFace();
-
-  isBroken = false;
-}
-
-void ClockDryer::ubdateClockFace()
-{
-  String textDigit = validationDigital(hour);
-  hourText[0] = textDigit[0];
-  hourText[1] = textDigit[1];
-
-  textDigit = validationDigital(minutes);
-  minutesText[0] = textDigit[0];
-  minutesText[1] = textDigit[1];
-
-  textDigit = validationDigital(seconds);
-  secondsText[0] = textDigit[0];
-  secondsText[1] = textDigit[1];
 }
 
 bool ClockDryer::getStatus()
@@ -176,64 +155,11 @@ void ClockDryer::editeTimer(
   if (!isVisible)
     color = colorBackground;
 
-  cursorTimer(coordsXPrev, colorBackground, colorBackground);
-  cursorTimer(coordsXNext, color, colorBackground);
+  display->cursor(coordsXPrev, colorBackground, colorBackground, 17);
+  display->cursor(coordsXNext, color, colorBackground, 17);
 }
 
-String ClockDryer::validationDigital(uint8_t number)
-{
-  String numberText = String(number);
-  if (numberText.length() < 2)
-    return "0" + numberText;
-
-  return numberText;
-}
-
-void ClockDryer::showTimer(
-    volatile uint8_t *selectItem,
-    String colorFocus,
-    String color,
-    String colorBackground,
-    bool isStarted)
-{
-
-  if (isStarted)
-  {
-    startTimer();
-  }
-  else
-  {
-    clockTime = millis();
-  }
-
-  String hourText = validationDigital(hour);
-  String minutesText = validationDigital(minutes);
-  String secondsText = validationDigital(seconds);
-
-  String text = hourText + ":" + minutesText + ":" + secondsText;
-  String colorText = "";
-  uint8_t coordsX = 5;
-  if (*selectItem == 1)
-  {
-    text = "[" + text + "]";
-    colorText = colorFocus;
-  }
-  else
-  {
-    text = " " + text + " ";
-    colorText = color;
-  }
-
-  char buffer[30];
-  sprintf(buffer, "%s", text);
-  display->drawText(
-      buffer,
-      colorText,
-      colorBackground,
-      coordsX,
-      25,
-      2);
-}
+// -- private
 
 void ClockDryer::startTimer()
 {
@@ -275,4 +201,54 @@ void ClockDryer::startTimer()
   }
 
   ubdateClockFace();
+}
+
+String ClockDryer::inputNumber(String numberText, volatile int8_t *plusMinus)
+{
+  int8_t newNumber = atoi(numberText.c_str()) + *plusMinus;
+
+  if (newNumber < 0)
+    return "9";
+
+  if (newNumber > 9)
+    return "0";
+
+  return String(newNumber);
+}
+
+void ClockDryer::validationTime()
+{
+  if (seconds > 60)
+  {
+    seconds = seconds - 60;
+    ++minutes;
+  }
+
+  if (minutes > 60)
+  {
+    minutes = minutes - 60;
+    ++hour;
+  }
+
+  if (hour > 99)
+    hour = 99;
+
+  ubdateClockFace();
+
+  isBroken = false;
+}
+
+void ClockDryer::ubdateClockFace()
+{
+  String textDigit = validationDigital(hour);
+  hourText[0] = textDigit[0];
+  hourText[1] = textDigit[1];
+
+  textDigit = validationDigital(minutes);
+  minutesText[0] = textDigit[0];
+  minutesText[1] = textDigit[1];
+
+  textDigit = validationDigital(seconds);
+  secondsText[0] = textDigit[0];
+  secondsText[1] = textDigit[1];
 }
