@@ -24,12 +24,15 @@ MainApplication::MainApplication()
 
 void MainApplication::loop()
 {
-  handleButtonClick();
-  showHeader();
-  showTimer();
-  showTemperature();
-  buttonStart();
-  buttonClear();
+  for (;;)
+  {
+    handleButtonClick();
+    showHeader();
+    showTimer();
+    showTemperature();
+    buttonStart();
+    buttonClear();
+  }
 }
 
 //--------------------------- IRAM_ATTR
@@ -78,6 +81,10 @@ void MainApplication::handleButtonEnter()
 
   switch (selectItem)
   {
+  case 0:
+    isEnter = false;
+    isLockSelect = true;
+    break;
   case 1: // установка таймера
     isTimerEditing = toggle(isTimerEditing);
     break;
@@ -254,6 +261,7 @@ String MainApplication::toggleFocus(String *text, uint8_t item)
 
 void MainApplication::buttonStart()
 {
+
   String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
   String color = toggleFocus(&text, 3);
   char buffer[20];
@@ -284,6 +292,9 @@ void MainApplication::buttonStart()
 
 void MainApplication::buttonClear()
 {
+  if (selectItem == selectButtonClear && !isEnter)
+    return;
+
   String text = display.utf8Rus("Сброс");
   String color = toggleFocus(&text, 4);
   char buffer[20];
@@ -303,6 +314,8 @@ void MainApplication::buttonClear()
     sensor.clearData();
     clockDryer.clearData();
   }
+
+  selectButtonClear = selectItem;
 }
 
 bool MainApplication::toggle(bool flag)

@@ -218,13 +218,24 @@ String ClockDryer::inputNumber(String numberText, volatile int8_t *plusMinus)
 
 void ClockDryer::validationTime()
 {
-  if (seconds > 60)
+
+  if (seconds >= 90)
+  {
+    seconds = seconds - 90;
+    ++minutes;
+  }
+  else if (seconds > 59)
   {
     seconds = seconds - 60;
     ++minutes;
   }
 
-  if (minutes > 60)
+  if (minutes >= 90)
+  {
+    minutes = minutes - 90;
+    ++hour;
+  }
+  else if (minutes > 59)
   {
     minutes = minutes - 60;
     ++hour;

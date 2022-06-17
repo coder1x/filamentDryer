@@ -42,6 +42,9 @@ private:
   volatile bool isTemperatureEditing = false;      // режим редактирование температуры
   volatile bool isTemperatureDigitEditing = false; // изменение цифры в Макс Т: температуре
   volatile uint8_t selectTemperature = 1;
+
+  uint8_t selectButtonClear = 99;
+  // uint8_t selectButtonStart = 99;
 };
 
 #endif

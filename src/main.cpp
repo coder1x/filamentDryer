@@ -20,10 +20,7 @@ void setup()
 
 void loop()
 {
-  for (;;)
-  {
-    application.loop();
-  }
+  application.loop();
 }
 
 //--------------------------- IRAM_ATTR
