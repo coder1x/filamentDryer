@@ -19,6 +19,11 @@ void Relay::setMaxTemperature(uint8_t temperature)
   maxTemperature = temperature;
 }
 
+void Relay::workRelay()
+{
+  _relay.tick();
+}
+
 void Relay::relayControl(uint8_t temperature)
 {
   if (temperature < maxTemperature)
@@ -29,5 +34,4 @@ void Relay::relayControl(uint8_t temperature)
   {
     stopRelay();
   }
-  _relay.tick();
 }

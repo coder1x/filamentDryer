@@ -32,6 +32,7 @@ void MainApplication::loop()
     showTemperature();
     buttonStart();
     buttonClear();
+    relay.workRelay();
   }
 }
 
@@ -129,26 +130,31 @@ void MainApplication::handleButtonClick()
 void MainApplication::showHeader()
 {
   uint8_t currentTemperature = sensor.getTemperature();
-  if (currentTemperature != 0)
-  {
-    char buffer[20];
-    sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), currentTemperature, " C");
-    display.drawText(
-        buffer,
-        COLOR_TEXT,
-        COLOR_HIGHLIGHTED,
-        0,
-        2);
-    display.tft.drawLine(
-        0,
-        12,
-        128,
-        12,
-        display.colorHex(COLOR_LINE));
-  }
+  if (currentTemperature == 0)
+    return;
 
   if (isStarted)
     relay.relayControl(currentTemperature);
+
+  if (cacheTemperature == currentTemperature)
+    return;
+
+  cacheTemperature = currentTemperature;
+
+  char buffer[20];
+  sprintf(buffer, "%s%d%s", display.utf8Rus("температура: "), currentTemperature, " C");
+  display.drawText(
+      buffer,
+      COLOR_TEXT,
+      COLOR_HIGHLIGHTED,
+      0,
+      2);
+  display.tft.drawLine(
+      0,
+      12,
+      128,
+      12,
+      display.colorHex(COLOR_LINE));
 }
 
 void MainApplication::showTimer()

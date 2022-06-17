@@ -12,6 +12,7 @@ public:
   void setMaxTemperature(uint8_t temperature);
   void stopRelay();
   void relayControl(uint8_t temperature);
+  void workRelay();
 
 private:
   uint8_t maxTemperature = 0;
