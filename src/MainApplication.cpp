@@ -33,6 +33,9 @@ void MainApplication::loop()
     buttonStart();
     buttonClear();
     relay.workRelay();
+
+    if (!isStartApplication)
+      isStartApplication = true;
   }
 }
 
@@ -159,12 +162,28 @@ void MainApplication::showHeader()
 
 void MainApplication::showTimer()
 {
+  if (isTimerFocused && selectItem != 1)
+  {
+    isTimerFocused = false;
+  }
+  else if (isStartApplication && !isStarted && selectItem != 1)
+    return;
+
+  const bool isEditing = !isTimerEditing && !isTimerDigitEditing && !isEnter;
+  if (isTimerFocused && selectItem == 1 && isEditing)
+    return;
+
   clockDryer.showTimer(
       &selectItem,
       COLOR_FOCUS,
       COLOR_TEXT,
       COLOR_HIGHLIGHTED,
       isStarted);
+
+  if (selectItem == 1)
+  {
+    isTimerFocused = true;
+  }
 
   if (isTimerEditing && selectItem == 1)
   {
@@ -317,6 +336,7 @@ void MainApplication::buttonClear()
   {
     isEnter = false;
     isLockSelect = false;
+    isTimerFocused = true;
     sensor.clearData();
     clockDryer.clearData();
   }

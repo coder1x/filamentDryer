@@ -44,6 +44,8 @@ private:
   volatile uint8_t selectTemperature = 1;
 
   uint8_t cacheTemperature = 0;
+  bool isStartApplication = false;
+  bool isTimerFocused = false;
 
   uint8_t selectButtonClear = 99;
   // uint8_t selectButtonStart = 99;
