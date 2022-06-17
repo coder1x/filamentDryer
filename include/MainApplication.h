@@ -47,6 +47,8 @@ private:
   bool isStartApplication = false;
   bool isTimerFocused = false;
 
+  bool isTemperatureFocused = false;
+
   uint8_t selectButtonClear = 99;
   // uint8_t selectButtonStart = 99;
 };

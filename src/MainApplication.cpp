@@ -229,11 +229,28 @@ void MainApplication::showTimer()
 
 void MainApplication::showTemperature()
 {
+
+  if (isTemperatureFocused && selectItem != 2)
+  {
+    isTemperatureFocused = false;
+  }
+  else if (isStartApplication && selectItem != 2)
+    return;
+
+  const bool isEditing = !isTemperatureEditing && !isTemperatureDigitEditing && !isEnter;
+  if (isTemperatureFocused && selectItem == 2 && isEditing)
+    return;
+
   sensor.showTemperature(
       &selectItem,
       COLOR_FOCUS,
       COLOR_TEXT,
       COLOR_HIGHLIGHTED);
+
+  if (selectItem == 2)
+  {
+    isTemperatureFocused = true;
+  }
 
   if (isTemperatureEditing && selectItem == 2)
   {
@@ -337,6 +354,7 @@ void MainApplication::buttonClear()
     isEnter = false;
     isLockSelect = false;
     isTimerFocused = true;
+    isTemperatureFocused = true;
     sensor.clearData();
     clockDryer.clearData();
   }
