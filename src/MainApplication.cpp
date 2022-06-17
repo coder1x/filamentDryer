@@ -304,6 +304,16 @@ String MainApplication::toggleFocus(String *text, uint8_t item)
 void MainApplication::buttonStart()
 {
 
+  if (isButtonStartFocused && selectItem != 3)
+  {
+    isButtonStartFocused = false;
+  }
+  else if (isStartApplication && selectItem != 3)
+    return;
+
+  if (isButtonStartFocused && selectItem == 3 && !isEnter)
+    return;
+
   String text = display.utf8Rus(isStarted ? "Стоп " : "Старт");
   String color = toggleFocus(&text, 3);
   char buffer[20];
@@ -315,6 +325,11 @@ void MainApplication::buttonStart()
       22,
       80,
       2);
+
+  if (selectItem == 3)
+  {
+    isButtonStartFocused = true;
+  }
 
   if (isStarted)
   {
@@ -329,6 +344,7 @@ void MainApplication::buttonStart()
   {
     isStarted = toggle(isStarted);
     isEnter = false;
+    isButtonStartFocused = false;
   }
 }
 

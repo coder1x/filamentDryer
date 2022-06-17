@@ -17,7 +17,7 @@ private:
   bool isPressed = false;
   bool isOnePress = false;
 
-  uint16_t delay = 20;
+  uint16_t delay = 50;
   uint16_t delayPress = 400;
   uint32_t timerClick = 0;
   uint32_t timerPress = 0;

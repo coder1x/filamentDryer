@@ -40,7 +40,7 @@ private:
   String inputNumber(String numberText, volatile int8_t *plusMinus);
 
   bool isLockMilis = false;
-  uint8_t timerTemperature = 0;
+  uint32_t timerTemperature = 0;
   uint8_t maxTemperature = 0;
   uint8_t currentTemperature = 0;
   String temperatureText[2] = {"0", "0"};

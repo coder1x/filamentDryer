@@ -46,11 +46,10 @@ private:
   uint8_t cacheTemperature = 0;
   bool isStartApplication = false;
   bool isTimerFocused = false;
-
   bool isTemperatureFocused = false;
+  bool isButtonStartFocused = false;
 
   uint8_t selectButtonClear = 99;
-  // uint8_t selectButtonStart = 99;
 };
 
 #endif
