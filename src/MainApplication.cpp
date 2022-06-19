@@ -13,10 +13,10 @@ TemperatureSensor sensor(&display);
 Relay relay;
 
 // -- Дисплей
-#define COLOR_TEXT "#FF6600"
-#define COLOR_FOCUS "#FFD800"
+#define COLOR_TEXT "#7FC9FF"
+#define COLOR_FOCUS "#FFFFFF"
 #define COLOR_HIGHLIGHTED "#000000"
-#define COLOR_LINE "#7FC9FF"
+#define COLOR_LINE "#FF6600"
 
 MainApplication::MainApplication()
 {
