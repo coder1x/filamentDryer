@@ -216,6 +216,7 @@ void MainApplication::showTimer()
       relay.stopRelay();
       isStarted = false;
       isLockSelect = false;
+      isButtonStartFocused = false;
     }
   }
 
